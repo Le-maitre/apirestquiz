@@ -2,12 +2,14 @@ package com.group3.apirestquiz.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "result")
 public class Result {
@@ -17,8 +19,6 @@ public class Result {
     private Long id;
 
     private int score;
-
-    private String question; // Il s'agit d'une
 
     private LocalDate date;
 

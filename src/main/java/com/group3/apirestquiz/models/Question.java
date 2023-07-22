@@ -1,12 +1,16 @@
 package com.group3.apirestquiz.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "question")
 public class Question {
@@ -15,13 +19,21 @@ public class Question {
     @Column(name = "question_id")
     private Long id;
 
+    @NonNull
+    @Size(max = 100)
     @Column(name = "texte")
     private String text;
 
-    private String type;
+    @NonNull
+    @Size(max = 15)
+    private String type; // Les valeurs possibles sont: "choix-multiple" et "vrai-faux"
 
+    @NonNull
+    @Size(max = 2)
     private int point;
 
+    @NonNull
+    @Size(max = 2)
     @Column(name = "reponse")
     private int response; // le numero du choix correspondant à la reponse
 
