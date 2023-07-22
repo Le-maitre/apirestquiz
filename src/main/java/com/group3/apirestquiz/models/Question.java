@@ -1,6 +1,9 @@
 package com.group3.apirestquiz.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,25 +20,27 @@ public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
-    private Long id;
+    private Long questionId;
 
-    @NonNull
-    @Size(max = 100)
+    @NotNull(message = "")
+    @Size(min = 10, max = 100, message = "")
     @Column(name = "texte")
     private String text;
 
-    @NonNull
-    @Size(max = 15)
+    @NotNull(message = "")
+    @Size(min = 9, max = 14)
     private String type; // Les valeurs possibles sont: "choix-multiple" et "vrai-faux"
 
-    @NonNull
-    @Size(max = 2)
-    private int point;
+    @NotNull(message = "")
+    @Min(value = 5, message = "")
+    @Max(value = 100, message = "")
+    private int point=5;
 
-    @NonNull
-    @Size(max = 2)
-    @Column(name = "reponse")
-    private int response; // le numero du choix correspondant à la reponse
+    @NotNull(message = "")
+    @Min(value = 1, message = "") // 1 parce qu'il y'a au moins une question
+    @Max(value = 6, message = "") // 6 parce qu'il y'a au plus 6 question
+    @Column(name = "numReponse")
+    private int numResponse; // le numero du choix correspondant à la reponse
 
     @OneToMany(
             cascade = CascadeType.ALL, // Permet de s'assurer que tous changement effectué sur une question va impacter ses choix et vise versa

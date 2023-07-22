@@ -6,13 +6,16 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
     List<Quiz> findAllByDomain(String domain);
     List<Quiz> findAllByTitle(String title);
+    List<Quiz> findByTitleContaining(String keyword);
     List<Quiz> findAllByNbMaxQuestion(int nbMaxQuestion);
     List<Quiz> findAllByVisibility(String visibility);
     List<Quiz> findAllByCreationDate(Date creationDate);
     List<Quiz> findAllByUserUserId(Long userId);
+    Quiz findByUserUserIdAndQuizId(Long userId, Long quizId);
 }

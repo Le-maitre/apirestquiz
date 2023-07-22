@@ -22,12 +22,12 @@ public class QuizService {
         return quizRepository.findAll();
     }
 
-    public Quiz getQuizById(Long quizId){
-        return quizRepository.findById(quizId).get();
+    public Optional<Quiz> getQuizById(Long quizId){
+        return quizRepository.findById(quizId);
     }
 
     public List<Quiz> getQuizzesByTitle(String title){
-        return quizRepository.findAllByTitle(title);
+        return quizRepository.findByTitleContaining(title);
     }
 
     public List<Quiz> getQuizzesByDomain(String domain){
