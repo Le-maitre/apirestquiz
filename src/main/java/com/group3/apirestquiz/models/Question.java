@@ -1,13 +1,10 @@
 package com.group3.apirestquiz.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +25,7 @@ public class Question {
     private String text;
 
     @NotNull(message = "")
-    @Size(min = 9, max = 14)
+    @Pattern(regexp = "^(choix-multiple|vrai-faux)$", message = "{}")
     private String type; // Les valeurs possibles sont: "choix-multiple" et "vrai-faux"
 
     @NotNull(message = "")
@@ -36,10 +33,14 @@ public class Question {
     @Max(value = 100, message = "")
     private int point=5;
 
+    @Column(name = "rang")
+    private int rank; // le rang de la question. Elle est toujour inferieur ou égale au nombre de question dans le quiz
+
     @NotNull(message = "")
     @Min(value = 1, message = "") // 1 parce qu'il y'a au moins une question
     @Max(value = 6, message = "") // 6 parce qu'il y'a au plus 6 question
     @Column(name = "numReponse")
+    @JsonIgnore
     private int numResponse; // le numero du choix correspondant à la reponse
 
     @OneToMany(
@@ -54,5 +55,6 @@ public class Question {
             cascade = CascadeType.ALL
     )
     @JoinColumn(name = "quiz_id") // La clé etrangère de la classe Question correspond à l'id de Quiz
+    @JsonIgnore
     private Quiz quiz;
 }

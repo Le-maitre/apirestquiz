@@ -1,5 +1,6 @@
 package com.group3.apirestquiz.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,11 +17,14 @@ public class Result {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "resultat_id")
-    private Long id;
+    private Long resultId;
 
-    private int score;
+    private int score=0;
 
-    private LocalDate date;
+    @Column(name = "etat")
+    private boolean state=false; // Pour savoir si la partie est fini ou non
+
+    private LocalDate date=LocalDate.now();
 
     // Rélation unidirectionnelle. Ceci est un choix
     @ManyToMany(
@@ -38,12 +42,14 @@ public class Result {
             cascade = CascadeType.ALL
     )
     @JoinColumn(name = "utilisateur_id")
+    @JsonIgnore
     private User user;
 
     @ManyToOne(
             cascade = CascadeType.ALL
     )
     @JoinColumn(name = "quiz_id")
+    @JsonIgnore
     private Quiz quiz;
 
 

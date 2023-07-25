@@ -17,5 +17,5 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
     List<Quiz> findAllByVisibility(String visibility);
     List<Quiz> findAllByCreationDate(Date creationDate);
     List<Quiz> findAllByUserUserId(Long userId);
-    Quiz findByUserUserIdAndQuizId(Long userId, Long quizId);
+    Optional<Quiz> findByUserUserIdAndQuizId(Long userId, Long quizId);
 }
