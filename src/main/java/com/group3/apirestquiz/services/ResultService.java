@@ -37,6 +37,10 @@ public class ResultService {
         Optional<Result> result = getResultsByUserIdAndQuizId(userId, quizId).stream().filter(r-> r.getResultId().equals(resultId)).findFirst();
         return result;
     }
+    public void deleteResult(Long userId, Long quizId, Long resultId) {
+        Optional<Result> result = getResultByUserIdAndQuizId(userId, quizId, resultId);
+        result.ifPresent(value->resultRepository.delete(result.get()));
+    }
     public List<Result> getResultsByQuizId(Long quizId) {
         return resultRepository.findAllByQuizQuizId(quizId);
     }

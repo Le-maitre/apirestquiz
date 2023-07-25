@@ -30,7 +30,7 @@ public class ChoiseService {
         return question.get().getChoises();
     }
 
-    public Choise getChoiseByUserIdAndQuizIdAndQuestionIdAndChoiseId(Long userId, Long quizId, Long questionId, Long choiseId) {
+    public Optional<Choise> getChoiseByUserIdAndQuizIdAndQuestionIdAndChoiseId(Long userId, Long quizId, Long questionId, Long choiseId) {
         // Chercher le quiz par son ID et l'ID de l'utilisateur
         Optional<Quiz> quiz = quizRepository.findByUserUserIdAndQuizId(userId, quizId);
 
@@ -59,7 +59,7 @@ public class ChoiseService {
                     Optional<Choise> choise = choises.stream().filter(c -> c.getChoiseId().equals(choiseId)).findFirst();
 
                     // Retourner la réponse si elle est présente, sinon retourner null
-                    return choise.orElse(null);
+                    return choise;
                 } else {
                     // Retourner null si la question n'est pas présente
                     return null; // ou lancez une autre exception appropriée ou retournez une valeur par défaut
@@ -74,6 +74,11 @@ public class ChoiseService {
         }
     }
 
+
+    public void deleteChoise(Long userId, Long quizId, Long questionId, Long choiseId) {
+        Optional<Choise> choise = getChoiseByUserIdAndQuizIdAndQuestionIdAndChoiseId(userId, quizId, questionId, choiseId);
+        choise.ifPresent(value->choiseRepository.delete(value));
+    }
 
     public Choise addChoise(Long userId, Long quizId, Long questionId, Choise choise) {
         Optional<Quiz> quiz = quizRepository.findByUserUserIdAndQuizId(userId, quizId);

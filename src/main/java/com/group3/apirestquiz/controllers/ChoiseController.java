@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/")
@@ -20,8 +21,12 @@ public class ChoiseController {
         return choiseService.getChoisesByQuizIdAndQuestionId(userId, quizId, questionId);
     }
     @GetMapping("users/{userId}/quizzes/{quizId}/questions/{questionId}/choises/{choiseId}")
-    public Choise getChoiseByQuizIdAndQuestionId(@PathVariable Long userId, @PathVariable Long quizId, @PathVariable Long questionId, @PathVariable Long choiseId) {
+    public Optional<Choise> getChoiseByQuizIdAndQuestionId(@PathVariable Long userId, @PathVariable Long quizId, @PathVariable Long questionId, @PathVariable Long choiseId) {
         return choiseService.getChoiseByUserIdAndQuizIdAndQuestionIdAndChoiseId(userId, quizId, questionId, choiseId);
+    }
+    @DeleteMapping("users/{userId}/quizzes/{quizId}/questions/{questionId}/choises/{choiseId}")
+    public void deleteChoise(@PathVariable Long userId, @PathVariable Long quizId, @PathVariable Long questionId, @PathVariable Long choiseId) {
+        choiseService.deleteChoise(userId, quizId, questionId, choiseId);
     }
     @PostMapping("users/{userId}/quizzes/{quizId}/questions/{questionId}/choises")
     public Choise addChoise(@PathVariable Long userId, @PathVariable Long quizId, @PathVariable Long questionId, @RequestBody Choise choise) {

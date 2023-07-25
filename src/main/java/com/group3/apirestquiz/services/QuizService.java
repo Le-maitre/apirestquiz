@@ -1,6 +1,7 @@
 package com.group3.apirestquiz.services;
 
 import com.group3.apirestquiz.models.Quiz;
+import com.group3.apirestquiz.models.User;
 import com.group3.apirestquiz.repositories.QuizRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,5 +58,17 @@ public class QuizService {
 
     public Quiz addQuiz(Quiz quiz){
         return quizRepository.save(quiz);
+    }
+    public void deleteQuiz(Long userId, Long quizId) {
+        Optional<Quiz> quiz = quizRepository.findByUserUserIdAndQuizId(userId, quizId);
+        quiz.ifPresent(value -> quizRepository.delete(value));
+    }
+    public Optional<Quiz> updateWithPutValueQuiz(Long userId, Long quizId, Quiz newQuiz) {
+        Optional<Quiz> quiz = quizRepository.findByUserUserIdAndQuizId(userId, quizId);
+        if(quiz.isPresent()){
+            newQuiz.getUser().setUserId(userId);
+            return Optional.of( quizRepository.save(newQuiz));
+        }
+        return quiz;
     }
 }

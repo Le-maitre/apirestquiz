@@ -53,6 +53,10 @@ public class QuestionService {
     public List<Question> getQuestionByNumResponse(int numResponse){
         return questionRepository.findAllByNumResponse(numResponse);
     }
+    public void deleteQuestion(Long userId, Long quizId, Long questionId) {
+        Optional<Question> question = getQuestionByQuizIdAndUserId(userId, questionId, questionId);
+        question.ifPresent(value-> questionRepository.delete(value));
+    }
     public Optional<Question> getQuestionByRank(int rank) {
         return questionRepository.findByRank(rank);
     }

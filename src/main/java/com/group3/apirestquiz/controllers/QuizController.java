@@ -66,10 +66,18 @@ public class QuizController {
     public Optional<Quiz> getQuizByUserIdAndQuizId(@PathVariable Long userId, @PathVariable Long quizId){
         return quizService.getQuizByUserUserIdAndQuizId(userId, quizId);
     }
+    @PutMapping("users/{userId}/quizzes/{quizId}")
+    public Optional<Quiz> updateWithPutValueQuiz(@PathVariable Long userId, @PathVariable Long quizId, @RequestBody Quiz newQuiz) {
+        return quizService.updateWithPutValueQuiz(userId, quizId, newQuiz);
+    }
 
-        @PostMapping("users/{userId}/quizzes")
+    @PostMapping("users/{userId}/quizzes")
     public Quiz addQuiz(@RequestBody @Valid Quiz quiz, @PathVariable Long userId){
         quiz.setUser(userService.getUserById(userId).get());
         return quizService.addQuiz(quiz);
+    }
+    @DeleteMapping("users/{userId}/quizzes/{quizId}")
+    public void deleteQuiz(@PathVariable Long userId, @PathVariable Long quizId) {
+        quizService.deleteQuiz(userId, quizId);
     }
 }

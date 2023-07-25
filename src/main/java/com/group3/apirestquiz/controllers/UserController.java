@@ -29,7 +29,15 @@ public class UserController {
     public Optional<User> getUserById(@PathVariable Long userId){
         return userService.getUserById(userId);
     }
-    @PostMapping("users/connect")
+    @DeleteMapping("users/{userId}")
+    public void deleteUser(@PathVariable Long userId){
+        userService.deleteUser(userId);
+    }
+    @PutMapping("users/{userId}")
+    public Optional<User> updateWithPutValueUser(@PathVariable Long userId, @RequestBody User user) {
+        return userService.updateWithPutValueUser(userId, user);
+    }
+    @PostMapping("users/connect") // l'utilisateur renseigne dans le corps un objet JSON contenant le login et le password
     public Optional<User> getUserByLoginAndPassword(@RequestBody Map<String, String> requestBody){
         String login = requestBody.get("login");
         String password = requestBody.get("password");

@@ -23,6 +23,10 @@ public class ResultController {
     public Optional<Result> getResultByUserIdAndQuizId(@PathVariable Long userId, @PathVariable Long quizId, @PathVariable Long resultId) {
         return resultService.getResultByUserIdAndQuizId(userId, quizId, resultId);
     }
+    @DeleteMapping("users/{userId}/quizzes/{quizId}/results/{resultId}")
+    public void deleteResult(@PathVariable Long userId, @PathVariable Long quizId, @PathVariable Long resultId){
+        resultService.deleteResult(userId, quizId, resultId);
+    }
     @GetMapping("quizzes/{quizId}/results")
     public List<Result> getResultsByQuizId(@PathVariable Long quizId) {
         return resultService.getResultsByQuizId(quizId);

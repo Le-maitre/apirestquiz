@@ -43,6 +43,10 @@ public class QuestionController {
     public Optional<Question> getQuetionsByQuizIdAndUserId(@PathVariable Long userId, @PathVariable Long quizId, @PathVariable Long questionId){
         return questionService.getQuestionByQuizIdAndUserId(quizId, userId, questionId);
     }
+    @DeleteMapping("users/{userId}/quizzes/{quizId}/questions/{questionId}")
+    public void deleteQuestion(@PathVariable Long userId, @PathVariable Long quizId, @PathVariable Long questionId) {
+        questionService.deleteQuestion(userId, quizId, questionId);
+    }
     @GetMapping(value = "questions", params = {"userId", "quizId", "questionId"})
     public Optional<Question> getQuetionsByQuizIdAndUserId2(@RequestParam("userId") Long userId, @RequestParam("quizId") Long quizId, @RequestParam("questionId") Long questionId){
         return questionService.getQuestionByQuizIdAndUserId(quizId, userId, questionId);
