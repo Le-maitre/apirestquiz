@@ -8,9 +8,12 @@ import com.group3.apirestquiz.repositories.QuestionRepository;
 import com.group3.apirestquiz.repositories.QuizRepository;
 import com.group3.apirestquiz.repositories.ResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -41,35 +44,53 @@ public class QuestionService {
     public Optional<Question> getQuestionById(Long questionId){
         return questionRepository.findById(questionId);
     }
-    public List<Question> getQuestionByPoint(int point){
+    public List<Question> getQuestionsByPoint(int point){
         return questionRepository.findAllByPoint(point);
     }
-    public List<Question> getQuestionByText(String text){
+    public List<Question> getQuestionsByText(String text){
         return questionRepository.findAllByTextContaining(text);
     }
-    public List<Question> getQuestionByType(String type){
+    public List<Question> getQuestionsByType(String type){
         return questionRepository.findAllByType(type);
     }
-    public List<Question> getQuestionByNumResponse(int numResponse){
-        return questionRepository.findAllByNumResponse(numResponse);
+    public List<Question> getQuestionsByNumResponse(int numResponse){
+        return questionRepository.findAllByRankResponse(numResponse);
+    }
+    public List<Question> getQuestionsByQuizIdAndUserId(Long quizId, Long userId){
+        return questionRepository.findAllByQuizQuizIdAndQuizUserUserId(quizId, userId);
+    }
+    public Optional<Question> getQuestionByQuizIdAndUserId(Long quizId, Long userId, Long questionId){
+        Optional<Question> question = getQuestionsByQuizIdAndUserId(quizId, userId).stream().filter(q-> q.getQuestionId().equals(questionId)).findFirst();
+        return question;
     }
     public void deleteQuestion(Long userId, Long quizId, Long questionId) {
-        Optional<Question> question = getQuestionByQuizIdAndUserId(userId, questionId, questionId);
+        Optional<Question> question = getQuestionByQuizIdAndUserId(quizId, userId, questionId);
         question.ifPresent(value-> questionRepository.delete(value));
     }
     public Optional<Question> getQuestionByRank(int rank) {
         return questionRepository.findByRank(rank);
     }
-    public List<Question> getQuestionsByQuizIdAndUserId(Long quizId, Long userId){
-        return questionRepository.findAllByQuizQuizIdAndQuizUserUserId(quizId, userId);
+    public Optional<Question> updateWithPutValueQuestion(Long userId, Long quizId, Long questionId, Question newQuestion) {
+        Optional<Question> questionOptional = getQuestionByQuizIdAndUserId(quizId, userId, questionId);
+        if(questionOptional.isPresent()) {
+            Question existingQuestion = questionOptional.get();
+            System.out.println(existingQuestion.getText());
+
+            // Mise à jour des données
+            existingQuestion.setText(newQuestion.getText());
+            existingQuestion.setType(newQuestion.getType());
+            existingQuestion.setPoint(newQuestion.getPoint());
+            existingQuestion.setRank(newQuestion.getRank());
+            existingQuestion.setRankResponse(newQuestion.getRankResponse());
+
+            Question updateQuestion = questionRepository.save(existingQuestion);
+            return Optional.of(updateQuestion);
+        }
+        return Optional.empty();
     }
 
-    public Optional<Question> getQuestionByQuizIdAndUserId(Long quizId, Long userId, Long questionId){
-        Optional<Question> question = getQuestionsByQuizIdAndUserId(quizId, userId).stream().filter(q-> q.getQuestionId().equals(questionId)).findFirst();
-        return question;
-    }
     public List<Question> getQuestionsByUserIdAndQuizId(Long userId, Long quizId){
-        return questionRepository.findAllByQuizUserUserIdAndQuizQuizId(userId, quizId);
+        return questionRepository.findAllByQuizQuizIdAndQuizUserUserId(quizId, userId);
     }
 
     public Optional<Question> getNextQuestion(Long userId, Long quizId) {
@@ -94,7 +115,38 @@ public class QuestionService {
         if(questionAnsweredSize < nbMaxQuestion){
             rank = ++questionAnsweredSize;
         }
+        else {
+            result.get().setState(true);
+            resultRepository.save(result.get());
+        }
         return getQuestionByRank(rank);
+    }
+
+    public ResponseEntity<Optional<Question>> updateWithPathValueQuiz(Long userId, Long quizId, Long questionId, Map<String, Object> updateQuestion) {
+        Optional<Question> question = questionRepository.findByQuestionIdAndQuizQuizIdAndQuizUserUserId(questionId, quizId, userId);
+        if(question.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Mise à jour des données de l'utilisateur
+        if(updateQuestion.containsKey("text")){
+            question.get().setText((String) updateQuestion.get("text"));
+        }
+        if(updateQuestion.containsKey("type")){
+            question.get().setType((String) updateQuestion.get("type"));
+        }
+        if(updateQuestion.containsKey("point")){
+            question.get().setPoint((int) updateQuestion.get("point"));
+        }
+        if(updateQuestion.containsKey("rank")){
+            question.get().setRank((int) updateQuestion.get("rank"));
+        }
+        if(updateQuestion.containsKey("rankResponse")){
+            question.get().setRankResponse((int) updateQuestion.get("rankResponse"));
+        }
+
+        questionRepository.save(question.get());
+        return ResponseEntity.ok(question);
     }
 
 }

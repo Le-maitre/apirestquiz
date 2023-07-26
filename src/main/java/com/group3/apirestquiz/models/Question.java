@@ -39,9 +39,8 @@ public class Question {
     @NotNull(message = "")
     @Min(value = 1, message = "") // 1 parce qu'il y'a au moins une question
     @Max(value = 6, message = "") // 6 parce qu'il y'a au plus 6 question
-    @Column(name = "numReponse")
-    @JsonIgnore
-    private int numResponse; // le numero du choix correspondant à la reponse
+    @Column(name = "rangReponse")
+    private int rankResponse; // le rang du choix correspondant à la reponse
 
     @OneToMany(
             cascade = CascadeType.ALL, // Permet de s'assurer que tous changement effectué sur une question va impacter ses choix et vise versa

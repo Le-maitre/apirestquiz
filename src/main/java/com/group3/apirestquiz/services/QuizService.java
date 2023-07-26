@@ -3,12 +3,16 @@ package com.group3.apirestquiz.services;
 import com.group3.apirestquiz.models.Quiz;
 import com.group3.apirestquiz.models.User;
 import com.group3.apirestquiz.repositories.QuizRepository;
+import com.group3.apirestquiz.repositories.UserRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -17,6 +21,8 @@ public class QuizService {
 
     @Autowired
     private QuizRepository quizRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     // Definission des différent méthode pour le service quiz
     public List<Quiz> getQuizzes(){
@@ -64,11 +70,50 @@ public class QuizService {
         quiz.ifPresent(value -> quizRepository.delete(value));
     }
     public Optional<Quiz> updateWithPutValueQuiz(Long userId, Long quizId, Quiz newQuiz) {
-        Optional<Quiz> quiz = quizRepository.findByUserUserIdAndQuizId(userId, quizId);
-        if(quiz.isPresent()){
-            newQuiz.getUser().setUserId(userId);
-            return Optional.of( quizRepository.save(newQuiz));
+        Optional<Quiz> quizOptional = quizRepository.findByUserUserIdAndQuizId(userId, quizId);
+        if (quizOptional.isPresent()) {
+            Quiz existingQuiz = quizOptional.get();
+
+            // Mise à jour des champs du quiz existant avec les nouvelles valeurs
+            existingQuiz.setTitle(newQuiz.getTitle());
+            existingQuiz.setNbMaxQuestion(newQuiz.getNbMaxQuestion());
+            existingQuiz.setVisibility(newQuiz.getVisibility());
+            existingQuiz.setDescription(newQuiz.getDescription());
+            existingQuiz.setDomain(newQuiz.getDomain());
+
+            // Enregistrez les modifications apportées au quiz existant dans la base de données
+            Quiz updatedQuiz = quizRepository.save(existingQuiz);
+            return Optional.of(updatedQuiz);
         }
-        return quiz;
+        return Optional.empty();
+    }
+    public ResponseEntity<Optional<Quiz>> updateWithPathValueQuiz(Long userId, Long quizId, Map<String, Object> updateQuiz) {
+        Optional<Quiz> quiz = quizRepository.findByUserUserIdAndQuizId(userId, quizId);
+        if(quiz.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Mise à jour des données de l'utilisateur
+        if(updateQuiz.containsKey("title")){
+            quiz.get().setTitle((String) updateQuiz.get("title"));
+        }
+        if(updateQuiz.containsKey("nbMaxQuestion")){
+            quiz.get().setNbMaxQuestion((int) updateQuiz.get("nbMaxQuestion"));
+        }
+        if(updateQuiz.containsKey("visibility")){
+            quiz.get().setVisibility((String) updateQuiz.get("visibility"));
+        }
+        if(updateQuiz.containsKey("description")){
+            quiz.get().setDescription((String) updateQuiz.get("description"));
+        }
+        if(updateQuiz.containsKey("creationDate")){
+            quiz.get().setCreationDate((LocalDate) updateQuiz.get("creationDate"));
+        }
+        if(updateQuiz.containsKey("domain")){
+            quiz.get().setDomain((String) updateQuiz.get("domain"));
+        }
+
+        quizRepository.save(quiz.get());
+        return ResponseEntity.ok(quiz);
     }
 }

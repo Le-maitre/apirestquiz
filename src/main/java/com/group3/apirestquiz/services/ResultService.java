@@ -55,7 +55,12 @@ public class ResultService {
     }
     public Optional<Result> endGame(Long userId, Long quizId) {
         Optional<Result> result = resultRepository.findByUserUserIdAndQuizQuizIdAndStateFalse(userId, quizId);
-        result.ifPresent(value -> value.setState(true));
+        if(result.isPresent()){
+            result.get().setState(true);
+        }
+        else {
+            return null;
+        }
         resultRepository.save(result.get());
         return result;
     }
@@ -63,7 +68,7 @@ public class ResultService {
         Optional<Question> question = questionService.getNextQuestion(userId, quizId);
         Optional<Result> result = getResultByUserIdAndQuizIdAndStateFalse(userId, quizId);
         if (question.isPresent() && result.isPresent()){
-            if (question.get().getNumResponse() == answer){
+            if (question.get().getRankResponse() == answer){
                 result.get().setScore(result.get().getScore()+question.get().getPoint());
             }
             result.get().getQuestions().add(question.get());

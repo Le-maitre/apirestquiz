@@ -22,6 +22,10 @@ public class Choise {
     @Column(name = "texte")
     private String text;
 
+    @NotNull(message = "Le rang ne doit pas etre null")
+    @Column(name = "rang")
+    private int rank;
+
     @ManyToOne(
             cascade = CascadeType.ALL
     )

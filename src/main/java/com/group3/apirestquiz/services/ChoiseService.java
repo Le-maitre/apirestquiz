@@ -7,10 +7,12 @@ import com.group3.apirestquiz.repositories.ChoiseRepository;
 import com.group3.apirestquiz.repositories.QuestionRepository;
 import com.group3.apirestquiz.repositories.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -79,6 +81,20 @@ public class ChoiseService {
         Optional<Choise> choise = getChoiseByUserIdAndQuizIdAndQuestionIdAndChoiseId(userId, quizId, questionId, choiseId);
         choise.ifPresent(value->choiseRepository.delete(value));
     }
+    public Optional<Choise> updateWithPutValueChoise(Long userId, Long quizId, Long questionId, Long choiseId, Choise newChoise) {
+        Optional<Choise> choiseOptional = choiseRepository.findByChoiseIdAndQuestionQuestionIdAndQuestionQuizQuizIdAndQuestionQuizUserUserId(choiseId, questionId, quizId, userId);
+        if(choiseOptional.isPresent()) {
+            Choise existingChoise = choiseOptional.get();
+
+            // Mise à jour du choix
+            existingChoise.setText(newChoise.getText());
+            existingChoise.setRank(newChoise.getRank());
+
+            Choise updateChoise = choiseRepository.save(existingChoise);
+            return Optional.of(choiseRepository.save(updateChoise));
+        }
+        return Optional.empty(); // On renvoie un instance vide de la classe Optional
+    }
 
     public Choise addChoise(Long userId, Long quizId, Long questionId, Choise choise) {
         Optional<Quiz> quiz = quizRepository.findByUserUserIdAndQuizId(userId, quizId);
@@ -93,5 +109,23 @@ public class ChoiseService {
             return null;
         }
         return choise;
+    }
+
+    public ResponseEntity<Optional<Choise>> updateWithPathValueQuiz(Long userId, Long quizId, Long questionId, Long choiseId, Map<String, Object> updateChoise) {
+        Optional<Choise> choise = choiseRepository.findByChoiseIdAndQuestionQuestionIdAndQuestionQuizQuizIdAndQuestionQuizUserUserId(choiseId, questionId, quizId, userId);
+        if(choise.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Mise à jour des données de l'utilisateur
+        if(updateChoise.containsKey("text")){
+            choise.get().setText((String) updateChoise.get("text"));
+        }
+        if(updateChoise.containsKey("rank")){
+            choise.get().setRank((int) updateChoise.get("rank"));
+        }
+
+        choiseRepository.save(choise.get());
+        return ResponseEntity.ok(choise);
     }
 }
