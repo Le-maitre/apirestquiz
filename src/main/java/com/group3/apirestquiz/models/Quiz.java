@@ -1,18 +1,16 @@
 package com.group3.apirestquiz.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "quiz")
 public class Quiz {
@@ -35,6 +33,7 @@ public class Quiz {
 
     @NotNull(message = "{NotNull.quiz.visibility}")
     @Size(min = 6, max = 7, message = "{Size.quiz.visibility}")
+    @Pattern(regexp = "^(public|private)$")
     @Column(name = "visibilite")
     private String visibility; // Les valeurs possibles sont : "public" et "private"
 
@@ -48,6 +47,7 @@ public class Quiz {
 
     @NotNull(message = "{NotNull.quiz.domain}")
     @Size(max = 20, message = "{Size.quiz.domain}")
+    @Pattern(regexp = "^(informatique|religion|histoire|science|culture general)$")
     @Column(name = "domaine")
     private String domain; // domaine du quiz. Exemple : informatique, mathematique, etc.
 

@@ -1,11 +1,7 @@
 package com.group3.apirestquiz.controllers;
 
 import com.group3.apirestquiz.models.Question;
-import com.group3.apirestquiz.models.Quiz;
-import com.group3.apirestquiz.models.User;
 import com.group3.apirestquiz.services.QuestionService;
-import com.group3.apirestquiz.services.QuizService;
-import com.group3.apirestquiz.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
