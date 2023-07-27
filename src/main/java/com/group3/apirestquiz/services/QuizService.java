@@ -34,7 +34,7 @@ public class QuizService {
     }
 
     public List<Quiz> getQuizzesByTitle(String title){
-        return quizRepository.findByTitleContaining(title);
+        return quizRepository.findAllByTitleContaining(title);
     }
 
     public List<Quiz> getQuizzesByDomain(String domain){

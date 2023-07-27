@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
     List<Quiz> findAllByDomain(String domain);
     List<Quiz> findAllByTitle(String title);
-    List<Quiz> findByTitleContaining(String keyword);
+    List<Quiz> findAllByTitleContaining(String keyword);
     List<Quiz> findAllByNbMaxQuestion(int nbMaxQuestion);
     List<Quiz> findAllByVisibility(String visibility);
     List<Quiz> findAllByCreationDate(Date creationDate);
