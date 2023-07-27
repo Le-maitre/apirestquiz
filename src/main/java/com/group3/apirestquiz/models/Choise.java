@@ -27,7 +27,10 @@ public class Choise {
     private int rank;
 
     @ManyToOne(
-            cascade = CascadeType.ALL
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
     )
     @JoinColumn(name = "question_id") // La clé etrangère de la classe Choose correspond à l'id de Question
     @JsonIgnore

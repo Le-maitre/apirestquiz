@@ -39,14 +39,20 @@ public class Result {
     private List<Question> questions = new ArrayList<>();
 
     @ManyToOne(
-            cascade = CascadeType.ALL
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
     )
     @JoinColumn(name = "utilisateur_id")
     @JsonIgnore
     private User user;
 
     @ManyToOne(
-            cascade = CascadeType.ALL
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
     )
     @JoinColumn(name = "quiz_id")
     @JsonIgnore

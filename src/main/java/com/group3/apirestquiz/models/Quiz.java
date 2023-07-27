@@ -52,7 +52,10 @@ public class Quiz {
     private String domain; // domaine du quiz. Exemple : informatique, mathematique, etc.
 
     @ManyToOne(
-            cascade = CascadeType.ALL
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
     )
     @JoinColumn(name = "utilisateur_id")
     private User user;

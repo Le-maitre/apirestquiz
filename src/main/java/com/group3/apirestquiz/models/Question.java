@@ -51,7 +51,10 @@ public class Question {
     private List<Choise> choises = new ArrayList<>();
 
     @ManyToOne(
-            cascade = CascadeType.ALL
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
     )
     @JoinColumn(name = "quiz_id") // La clé etrangère de la classe Question correspond à l'id de Quiz
     @JsonIgnore
