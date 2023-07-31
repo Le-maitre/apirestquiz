@@ -5,10 +5,12 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDate;
 
 @Data
+@DynamicUpdate // permet de mettre à jour uniquement la partie modifier
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
