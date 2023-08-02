@@ -3,7 +3,7 @@ package com.group3.apirestquiz.controllers;
 import com.group3.apirestquiz.models.User;
 import com.group3.apirestquiz.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.Data;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,7 @@ public class UserController {
 
     @Operation(summary = "Créer un nouveau utilisateur")
     @PostMapping("users")
-    public User addUser(@RequestBody User user){
+    public User addUser(@Valid @RequestBody User user){
         return userService.addUser(user);
     }
 
@@ -51,7 +51,7 @@ public class UserController {
 
     @Operation(summary = "Connecter un utilisateur avec le login et le password")
     @PostMapping("users/connect") // l'utilisateur renseigne dans le corps un objet JSON contenant le login et le password
-    public Optional<User> getUserByLoginAndPassword(@RequestBody Map<String, String> requestBody){
+    public Optional<User> getUserByLoginAndPassword(@Valid @RequestBody Map<String, String> requestBody){
         String login = requestBody.get("login");
         String password = requestBody.get("password");
         return userService.getUserByLoginAndPassword(login, password);

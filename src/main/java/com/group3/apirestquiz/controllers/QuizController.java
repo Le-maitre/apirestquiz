@@ -91,7 +91,7 @@ public class QuizController {
 
     @Operation(summary = "Création d'un quiz pour un utilisateur")
     @PostMapping("users/{userId}/quizzes")
-    public Quiz addQuiz(@RequestBody @Valid Quiz quiz, @PathVariable Long userId){
+    public Quiz addQuiz(@Valid @RequestBody Quiz quiz, @PathVariable Long userId){
         quiz.setUser(userService.getUserById(userId).get());
         return quizService.addQuiz(quiz);
     }

@@ -3,6 +3,7 @@ package com.group3.apirestquiz.controllers;
 import com.group3.apirestquiz.models.Choise;
 import com.group3.apirestquiz.services.ChoiseService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class ChoiseController {
 
     @Operation(summary = "Créer un choix spécifique dans une question d'un quiz pour un utilisateur")
     @PostMapping("users/{userId}/quizzes/{quizId}/questions/{questionId}/choises")
-    public Choise addChoise(@PathVariable Long userId, @PathVariable Long quizId, @PathVariable Long questionId, @RequestBody Choise choise) {
+    public Choise addChoise(@PathVariable Long userId, @PathVariable Long quizId, @PathVariable Long questionId, @Valid @RequestBody Choise choise) {
         return choiseService.addChoise(userId, quizId, questionId, choise);
     }
 

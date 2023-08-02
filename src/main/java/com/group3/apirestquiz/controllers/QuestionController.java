@@ -3,6 +3,7 @@ package com.group3.apirestquiz.controllers;
 import com.group3.apirestquiz.models.Question;
 import com.group3.apirestquiz.services.QuestionService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class QuestionController {
 
     @Operation(summary = "Création d'une question pour un quiz d'un utilisateur")
     @PostMapping("users/{userId}/quizzes/{quizId}/questions") // une question doit obligatoire appartenir à un quiz qui lui appartient à un utilisateur
-    public Question addQuestion(@RequestBody Question question, @PathVariable Long userId, @PathVariable Long quizId){
+    public Question addQuestion(@Valid @RequestBody Question question, @PathVariable Long userId, @PathVariable Long quizId){
        return questionService.addQuestion(question, userId, quizId);
     }
 
