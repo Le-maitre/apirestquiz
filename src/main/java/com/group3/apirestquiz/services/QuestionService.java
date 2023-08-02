@@ -67,8 +67,8 @@ public class QuestionService {
         Optional<Question> question = getQuestionByQuizIdAndUserId(quizId, userId, questionId);
         question.ifPresent(value-> questionRepository.delete(value));
     }
-    public Optional<Question> getQuestionByRank(int rank) {
-        return questionRepository.findByRank(rank);
+    public Optional<Question> getQuestionByRank(int rank, Long quizId) {
+        return questionRepository.findByRankAndQuizQuizId(rank, quizId);
     }
     public Optional<Question> updateWithPutValueQuestion(Long userId, Long quizId, Long questionId, Question newQuestion) {
         Optional<Question> questionOptional = getQuestionByQuizIdAndUserId(quizId, userId, questionId);
@@ -95,6 +95,7 @@ public class QuestionService {
 
     public Optional<Question> getNextQuestion(Long userId, Long quizId) {
         Optional<Result> result = resultService.getResultByUserIdAndQuizIdAndStateFalse(userId, quizId);
+        System.out.println(quizId);
         if (result.isEmpty()){
             Optional<User> user = userService.getUserById(userId);
             Optional<Quiz> quiz = quizService.getQuizById(quizId);
@@ -114,12 +115,13 @@ public class QuestionService {
         int rank = 0; // Le rank de la question à retourner
         if(questionAnsweredSize < nbMaxQuestion){
             rank = ++questionAnsweredSize;
+            System.out.println(rank);
         }
         else {
             result.get().setState(true);
             resultRepository.save(result.get());
         }
-        return getQuestionByRank(rank);
+        return getQuestionByRank(rank, quizId);
     }
 
     public ResponseEntity<Optional<Question>> updateWithPathValueQuiz(Long userId, Long quizId, Long questionId, Map<String, Object> updateQuestion) {

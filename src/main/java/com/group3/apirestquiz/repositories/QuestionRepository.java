@@ -16,5 +16,5 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<Question> findAllByType(String type);
     List<Question> findAllByPoint(int point);
     List<Question> findAllByRankResponse(int numResponse);
-    Optional<Question> findByRank(int rank);
+    Optional<Question> findByRankAndQuizQuizId(int rank, Long quizId);
 }

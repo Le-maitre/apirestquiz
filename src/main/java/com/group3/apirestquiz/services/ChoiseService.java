@@ -6,6 +6,7 @@ import com.group3.apirestquiz.models.Quiz;
 import com.group3.apirestquiz.repositories.ChoiseRepository;
 import com.group3.apirestquiz.repositories.QuestionRepository;
 import com.group3.apirestquiz.repositories.QuizRepository;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
