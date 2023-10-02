@@ -32,10 +32,12 @@ public class User {
     private String email;
 
     @NotNull
-    @Size(max = 10)
+    @Size(max = 20)
     private String login;
 
     @NotNull
     @Column(name = "mot_de_passe")
     private String password;
+
+    private String imageUrl; // l'url de l'image
 }

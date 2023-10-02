@@ -49,10 +49,11 @@ public class Quiz {
 
     @NotNull(message = "{NotNull.quiz.domain}")
     @Size(max = 20, message = "{Size.quiz.domain}")
-    @Pattern(regexp = "^(informatique|religion|histoire|science|culture general)$")
+    @Pattern(regexp = "^(informatique|religion|histoire|science|culture general|sport|anime|art|geographie|mecanique)$")
     @Column(name = "domaine")
     private String domain; // domaine du quiz. Exemple : informatique, mathematique, etc.
 
+    private String imageUrl; // l'url de l'image
     @ManyToOne(
             cascade = {
                     CascadeType.PERSIST,
