@@ -53,6 +53,12 @@ public class QuizController {
         return quizService.getQuizzesPlayedByUser(userId);
     }
 
+    @Operation(summary = "Obtenir les quiz dont l'utilisateur à jouer")
+    @GetMapping(value = "quizzes/users/{userId}/played", params = "domain")
+    public List<Quiz> getQuizzesPlayedByUserAndDomain(@PathVariable Long userId, @RequestParam("domain") String domain){
+        return quizService.getQuizzesPlayedByUserAndDomain(userId, domain);
+    }
+
     @Operation(summary = "Obtenir des quiz en fonction du titre")
     @GetMapping(value = "quizzes", params = "title", produces = MediaType.APPLICATION_JSON_VALUE /*MediaType.APPLICATION_JSON_VALUE Permet d'acceper des espace entre les chaines. Exemple: Langage Java. Parce que les url n'accepte pas les espaces par defaut*/)
     public List<Quiz> getQuizzesByTitle(@RequestParam("title") String title){

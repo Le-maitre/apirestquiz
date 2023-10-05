@@ -129,4 +129,12 @@ public class QuizService {
                 .distinct() // Élimine les doublons de quiz
                 .collect(Collectors.toList());
     }
+
+    public List<Quiz> getQuizzesPlayedByUserAndDomain(Long userId, String domain) {
+        // Cette méthode permet de récupérer les quiz joués par un utilisateur dans un domaine précis
+        List<Quiz> quizList = getQuizzesPlayedByUser(userId);
+        return quizList.stream()
+                .filter(quiz -> quiz.getDomain().equals(domain))
+                .collect(Collectors.toList());
+    }
 }
