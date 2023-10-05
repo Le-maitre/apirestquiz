@@ -22,4 +22,5 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
     @Query("SELECT r FROM Result r WHERE r.quiz.quizId = :quizId AND r.score = (SELECT MAX(r2.score) FROM Result r2 WHERE r2.user.userId = r.user.userId AND r2.quiz.quizId = :quizId) ORDER BY r.score DESC")
     List<Result> findMaxScoreResultsByUserAndQuiz(@Param("quizId") Long quizId);
 
+    List<Result> findAllByUserUserId(Long userId);
 }
