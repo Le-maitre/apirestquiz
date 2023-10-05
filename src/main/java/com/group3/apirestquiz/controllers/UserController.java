@@ -1,5 +1,6 @@
 package com.group3.apirestquiz.controllers;
 
+import com.group3.apirestquiz.models.Quiz;
 import com.group3.apirestquiz.models.User;
 import com.group3.apirestquiz.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,6 +36,12 @@ public class UserController {
     @GetMapping("users/{userId}")
     public Optional<User> getUserById(@PathVariable Long userId){
         return userService.getUserById(userId);
+    }
+
+    @Operation(summary = "Obtenir les users qui on jouer à un quiz donné")
+    @GetMapping("quizzes/{quizId}/users/played")
+    public List<User> getUsersPlayedInQuiz(@PathVariable Long quizId){
+        return userService.getUsersPlayedInQuiz(quizId);
     }
 
     @Operation(summary = "Supprimer un utilisateur spécifique")

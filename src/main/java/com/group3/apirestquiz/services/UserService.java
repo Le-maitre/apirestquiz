@@ -1,6 +1,9 @@
 package com.group3.apirestquiz.services;
 
+import com.group3.apirestquiz.models.Quiz;
+import com.group3.apirestquiz.models.Result;
 import com.group3.apirestquiz.models.User;
+import com.group3.apirestquiz.repositories.ResultRepository;
 import com.group3.apirestquiz.repositories.UserRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Data
@@ -16,6 +20,8 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ResultRepository resultRepository;
 
     public List<User> getUsers(){
         return userRepository.findAll();
@@ -74,5 +80,14 @@ public class UserService {
 
         userRepository.save(user.get());
         return ResponseEntity.ok(user);
+    }
+
+    public List<User> getUsersPlayedInQuiz(Long quizId) {
+        // Cette méthode permet de récupérer les utilisateurs qui ont joué à un quiz donné
+
+        return resultRepository.findAllByQuizQuizId(quizId).stream()
+                .map(Result::getUser) // Récupère les users à partir des résultats
+                .distinct() // Élimine les doublons de quiz
+                .collect(Collectors.toList());
     }
 }
