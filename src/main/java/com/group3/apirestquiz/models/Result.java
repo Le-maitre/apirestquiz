@@ -26,6 +26,9 @@ public class Result {
 
     private LocalDate date=LocalDate.now();
 
+    private int nbCorrectQuestion=0; // le nombre de question correcte
+    private int nbIncorrectQuestion=0; // le nombre de question incorrecte
+
     // Rélation unidirectionnelle. Ceci est un choix
     @ManyToMany(
             fetch = FetchType.LAZY // à la récupération du Resultat, les questions ne sont pas récupérés. Mais lorsque je ferai appele à la liste de question de l'objet résultat spring executera une nouvelle réquête pour recuperer la données. Cela permet d'avoir une performance optimal.
