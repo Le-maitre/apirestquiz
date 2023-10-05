@@ -97,4 +97,8 @@ public class ResultService {
 
         return formattedResults;
     }
+
+    public List<Result> getResultsByUserId(Long userId) {
+        return resultRepository.findAllByUserUserId(userId);
+    }
 }

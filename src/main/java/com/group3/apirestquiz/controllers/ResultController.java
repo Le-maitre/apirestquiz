@@ -21,6 +21,11 @@ public class ResultController {
     public List<Result> getResultsByUserIdAndQuizId(@PathVariable Long userId, @PathVariable Long quizId) {
         return resultService.getResultsByUserIdAndQuizId(userId, quizId);
     }
+    @Operation(summary = "Obtenir tous les résultats qu'un utilisateur spécifique a obtenu")
+    @GetMapping("users/{userId}/results")
+    public List<Result> getResultsByUserId(@PathVariable Long userId) {
+        return resultService.getResultsByUserId(userId);
+    }
 
     @Operation(summary = "Obtenir un résultat spécifique qu'un utilisateur à obtenue dans un quiz")
     @GetMapping("users/{userId}/quizzes/{quizId}/results/{resultId}")
