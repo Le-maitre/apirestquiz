@@ -3,6 +3,7 @@ package com.group3.apirestquiz.controllers;
 import com.group3.apirestquiz.models.Quiz;
 import com.group3.apirestquiz.models.User;
 import com.group3.apirestquiz.services.QuizService;
+import com.group3.apirestquiz.services.ResultService;
 import com.group3.apirestquiz.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -28,6 +29,8 @@ public class QuizController {
     private QuizService quizService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ResultService resultService;
 
     @Operation(summary = "Obtenir la liste des quiz")
     @GetMapping("quizzes")
@@ -118,5 +121,12 @@ public class QuizController {
     @RequestMapping(value = "users/{userId}/quizzes/{quizId}", method = RequestMethod.PATCH)
     public ResponseEntity<Optional<Quiz>> updateWithPathValueQuiz(@PathVariable Long userId, @PathVariable Long quizId, @RequestBody Map<String, Object> updateQuiz) {
         return quizService.updateWithPathValueQuiz(userId, quizId, updateQuiz);
+    }
+
+    @Operation(summary = "Classement d'un quiz")
+    @GetMapping("quizzes/{quizId}/rank")
+    public ResponseEntity<Map<Integer, Map<String, Object>>> getRank(@PathVariable Long quizId) {
+        Map<Integer, Map<String, Object>> maxScoreResults = resultService.getMaxScoreResultsByUserAndQuiz(quizId);
+        return ResponseEntity.ok(maxScoreResults);
     }
 }
