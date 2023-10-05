@@ -68,8 +68,14 @@ public class ResultService {
         Optional<Question> question = questionService.getNextQuestion(userId, quizId);
         Optional<Result> result = getResultByUserIdAndQuizIdAndStateFalse(userId, quizId);
         if (question.isPresent() && result.isPresent()){
+            // Vérification si la réponse est correcte
             if (question.get().getRankResponse() == answer){
                 result.get().setScore(result.get().getScore()+question.get().getPoint());
+                result.get().setNbCorrectQuestion(result.get().getNbCorrectQuestion()+1);
+            }
+            // Si la réponse est incorrecte
+            else {
+                result.get().setNbIncorrectQuestion(result.get().getNbIncorrectQuestion()+1);
             }
             result.get().getQuestions().add(question.get());
             resultRepository.save(result.get());
