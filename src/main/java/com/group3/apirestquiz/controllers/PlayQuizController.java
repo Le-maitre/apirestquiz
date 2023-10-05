@@ -39,11 +39,5 @@ public class PlayQuizController {
         return resultService.respondQuestion(userId, quizId, answer);
     }
 
-    @Operation(summary = "Classement d'un quiz")
-    @GetMapping("rank")
-    public ResponseEntity<Map<Integer, Map<String, String>>> getRank(@PathVariable Long userId, @PathVariable Long quizId) {
-        Map<Integer, Map<String, String>> maxScoreResults = resultService.getMaxScoreResultsByUserAndQuiz(quizId);
-        return ResponseEntity.ok(maxScoreResults);
-    }
 
 }

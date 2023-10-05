@@ -81,16 +81,17 @@ public class ResultService {
 
 
 
-    public Map<Integer, Map<String, String>> getMaxScoreResultsByUserAndQuiz(Long quizId) {
+    public Map<Integer, Map<String, Object>> getMaxScoreResultsByUserAndQuiz(Long quizId) {
         List<Result> maxScoreResults = resultRepository.findMaxScoreResultsByUserAndQuiz(quizId);
 
         // Traiter les résultats pour les formater sous forme de JSON
-        Map<Integer, Map<String, String>> formattedResults = new HashMap<>();
+        Map<Integer, Map<String, Object>> formattedResults = new HashMap<>();
         int rank = 1;
         for (Result result : maxScoreResults) {
-            Map<String, String> userData = new HashMap<>();
+            Map<String, Object> userData = new HashMap<>();
+            userData.put("rank", rank);
             userData.put("score", String.valueOf(result.getScore()));
-            userData.put("name", result.getUser().getFirstName());
+            userData.put("user", result.getUser());
             formattedResults.put(rank, userData);
             rank++;
         }
