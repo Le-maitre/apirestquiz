@@ -1,8 +1,9 @@
 package com.group3.apirestquiz.services;
 
 import com.group3.apirestquiz.models.Quiz;
-import com.group3.apirestquiz.models.User;
+import com.group3.apirestquiz.models.Result;
 import com.group3.apirestquiz.repositories.QuizRepository;
+import com.group3.apirestquiz.repositories.ResultRepository;
 import com.group3.apirestquiz.repositories.UserRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Data
@@ -23,6 +25,8 @@ public class QuizService {
     private QuizRepository quizRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    ResultRepository resultRepository;
 
     // Definission des différent méthode pour le service quiz
     public List<Quiz> getQuizzes(){
@@ -115,5 +119,14 @@ public class QuizService {
 
         quizRepository.save(quiz.get());
         return ResponseEntity.ok(quiz);
+    }
+
+    public List<Quiz> getQuizzesPlayedByUser(Long userId) {
+        // Cette méthode permet de récupérer les quiz joués par un utilisateur
+
+        return resultRepository.findAllByUserUserId(userId).stream()
+                .map(Result::getQuiz) // Récupère les quiz à partir des résultats
+                .distinct() // Élimine les doublons de quiz
+                .collect(Collectors.toList());
     }
 }
