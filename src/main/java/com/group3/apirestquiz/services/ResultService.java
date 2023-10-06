@@ -78,8 +78,15 @@ public class ResultService {
                 result.get().setNbIncorrectQuestion(result.get().getNbIncorrectQuestion()+1);
             }
             result.get().getQuestions().add(question.get());
+
+            int questionAnsweredSize = result.get().getQuestions().size(); // On recupère le nombre de question repondue
+            int nbQuestion = result.get().getQuiz().getNbQuestion();
+
+            if(questionAnsweredSize == nbQuestion){
+                result.get().setState(true);
+            }
+
             resultRepository.save(result.get());
-            System.out.println(result.get().getQuestions().size());
             return result.get();
         }
         return null;

@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -39,6 +38,8 @@ public class QuestionService {
     public Question addQuestion(Question question, Long userId, Long quizId){
         Optional<Quiz> quiz = quizRepository.findByUserUserIdAndQuizId(userId, quizId);
         question.setQuiz(quiz.get());
+        quiz.get().setNbQuestion(quiz.get().getNbQuestion()+1);
+        quizRepository.save(quiz.get());
         return questionRepository.save(question);
     }
     public Optional<Question> getQuestionById(Long questionId){
@@ -111,11 +112,10 @@ public class QuestionService {
         }
 
         int questionAnsweredSize = result.get().getQuestions().size(); // On recupère le nombre de question repondue
-        int nbMaxQuestion = result.get().getQuiz().getNbMaxQuestion(); // On récupère le nombre maximal de question
+        int nbQuestion = result.get().getQuiz().getNbQuestion(); // On récupère le nombre maximal de question
         int rank = 0; // Le rank de la question à retourner
-        if(questionAnsweredSize < nbMaxQuestion){
+        if(questionAnsweredSize < nbQuestion){
             rank = ++questionAnsweredSize;
-            System.out.println(rank);
         }
         else {
             result.get().setState(true);

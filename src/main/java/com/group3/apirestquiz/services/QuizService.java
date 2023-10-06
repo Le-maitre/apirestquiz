@@ -42,8 +42,8 @@ public class QuizService {
         return quizRepository.findAllByDomain(domain);
     }
 
-    public List<Quiz> getQuizzesByNbMaxQuestion(int nbMaxQuestion){
-        return quizRepository.findAllByNbMaxQuestion(nbMaxQuestion);
+    public List<Quiz> getQuizzesByNbQuestion(int nbQuestion){
+        return quizRepository.findAllByNbQuestion(nbQuestion);
     }
 
     public List<Quiz> getQuizzesByVisibility(String visibility){
@@ -64,6 +64,7 @@ public class QuizService {
     }
 
     public Quiz addQuiz(Quiz quiz){
+        quiz.setNbQuestion(0);
         return quizRepository.save(quiz);
     }
     public void deleteQuiz(Long userId, Long quizId) {
@@ -77,7 +78,6 @@ public class QuizService {
 
             // Mise à jour des champs du quiz existant avec les nouvelles valeurs
             existingQuiz.setTitle(newQuiz.getTitle());
-            existingQuiz.setNbMaxQuestion(newQuiz.getNbMaxQuestion());
             existingQuiz.setVisibility(newQuiz.getVisibility());
             existingQuiz.setDescription(newQuiz.getDescription());
             existingQuiz.setDomain(newQuiz.getDomain());
@@ -97,9 +97,6 @@ public class QuizService {
         // Mise à jour des données de l'utilisateur
         if(updateQuiz.containsKey("title")){
             quiz.get().setTitle((String) updateQuiz.get("title"));
-        }
-        if(updateQuiz.containsKey("nbMaxQuestion")){
-            quiz.get().setNbMaxQuestion((int) updateQuiz.get("nbMaxQuestion"));
         }
         if(updateQuiz.containsKey("visibility")){
             quiz.get().setVisibility((String) updateQuiz.get("visibility"));
