@@ -66,9 +66,9 @@ public class QuizController {
     }
 
     @Operation(summary = "Obtenir des quiz en fonction du nombre maximal de question")
-    @GetMapping(value = "quizzes", params = "nbMaxQuestion")
-    public List<Quiz> getQuizzesByNbMaxQuestion(@RequestParam("nbMaxQuestion") int nbMaxQuestion){
-        return quizService.getQuizzesByNbMaxQuestion(nbMaxQuestion);
+    @GetMapping(value = "quizzes", params = "nbQuestion")
+    public List<Quiz> getQuizzesByNbMaxQuestion(@RequestParam("nbMaxQuestion") int nbQuestion){
+        return quizService.getQuizzesByNbQuestion(nbQuestion);
     }
 
     @Operation(summary = "Obtenir des quiz en fonction de la visibilité")

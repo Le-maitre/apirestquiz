@@ -27,17 +27,14 @@ public class Quiz {
     @Column(name = "titre")
     private String title;
 
-    @NotNull(message = "{NotNull.quiz.nbMaxQuestion}")
-    @Min(value = 2, message = "{Min.quiz.nbMaxQuestion}")
-    @Max(value = 50, message = "{Max.quiz.nbMaxQuestion}")
-    @Column(name = "nb_max_question")
-    private int nbMaxQuestion;
+    @Max(value = 20, message = "{Max.quiz.nbQuestion}")
+    @Column(name = "nb_question")
+    private int nbQuestion=0;
 
-    @NotNull(message = "{NotNull.quiz.visibility}")
     @Size(min = 6, max = 7, message = "{Size.quiz.visibility}")
-    @Pattern(regexp = "^(public|private)$")
+    @Pattern(regexp = "^(public|private)$", message = "{Pattern.quiz.visibility}")
     @Column(name = "visibilite")
-    private String visibility; // Les valeurs possibles sont : "public" et "private"
+    private String visibility="public"; // Les valeurs possibles sont : "public" et "private"
 
 
     @Size(max = 100, message = "{Size.quiz.description}")
