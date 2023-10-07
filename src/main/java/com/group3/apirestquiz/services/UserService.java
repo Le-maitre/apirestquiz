@@ -9,6 +9,8 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -89,5 +91,24 @@ public class UserService {
                 .map(Result::getUser) // Récupère les users à partir des résultats
                 .distinct() // Élimine les doublons de quiz
                 .collect(Collectors.toList());
+    }
+
+    public List<User> getFollowers(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isPresent()){
+            return user.get().getFollowers();
+        }
+        return new ArrayList<>();
+    }
+
+    public String followAnUser(Long followerId, Long userSecondId) {
+        Optional<User> follower = userRepository.findById(followerId);
+        Optional<User> userSecond = userRepository.findById(userSecondId);
+        if(follower.isPresent() && userSecond.isPresent()){
+            userSecond.get().getFollowers().add(follower.get());
+            userRepository.save(userSecond.get());
+            return "Abonnement reussi";
+        }
+        return "Erreur: Vous ne pouvez pas vous abonnées";
     }
 }
