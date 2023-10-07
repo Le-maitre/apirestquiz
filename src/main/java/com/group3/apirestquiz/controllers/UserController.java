@@ -69,4 +69,18 @@ public class UserController {
     public ResponseEntity<Optional<User>> updateWithPathValueUser(@PathVariable Long userId, @RequestBody Map<String, String> updateUser) {
         return userService.updateWithPathValueUser(userId, updateUser);
    }
+
+
+   @Operation(summary = "Suivre le compte d'un utilisateur")
+   @GetMapping("users/{followerId}/follow/{userSecondId}")
+    public String followAnUser(@PathVariable Long followerId, @PathVariable Long userSecondId) {
+        return userService.followAnUser(followerId, userSecondId);
+   }
+
+   @Operation(summary = "Recupérer la liste des followers d'un user")
+   @GetMapping("users/{userId}/followers")
+   public List<User> getFollowers(@PathVariable Long userId) {
+        return userService.getFollowers(userId);
+   }
+
 }
