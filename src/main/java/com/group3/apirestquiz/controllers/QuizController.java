@@ -92,6 +92,13 @@ public class QuizController {
         return quizService.getQuizzesByUserId(userId);
     }
 
+    @Operation(summary = "Obtenir les quiz pour un utilisateur par domaine")
+    @GetMapping(value = "users/{userId}/quizzes", params = "domain")
+    public List<Quiz> getQuizzesByUserAndDomain(@PathVariable Long userId, @RequestParam("domain") String domain){
+        return quizService.getQuizzesByUserAndDomain(userId, domain);
+    }
+
+
     @Operation(summary = "Obtenir un quiz pour un utilisateur")
     @GetMapping("users/{userId}/quizzes/{quizId}")
     public Optional<Quiz> getQuizByUserIdAndQuizId(@PathVariable Long userId, @PathVariable Long quizId){

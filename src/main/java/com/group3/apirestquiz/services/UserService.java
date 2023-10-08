@@ -111,4 +111,26 @@ public class UserService {
         }
         return "Erreur: Vous ne pouvez pas vous abonnées";
     }
+
+    public List<User> getFollowings(Long userId) {
+        // Récupérer la liste des users qu'un user follow
+        Optional<User> userOptional = userRepository.findById(userId);
+        if(userOptional.isPresent()){
+            return userOptional.get().getFollowings();
+        }
+        return new ArrayList<>();
+    }
+
+    public String noFollowAnUser(Long followerId, Long userSecondId) {
+        Optional<User> actuallyFollower = userRepository.findById(followerId);
+        Optional<User> actuallyFollowing = userRepository.findById(userSecondId);
+        if(actuallyFollower.isPresent() && actuallyFollowing.isPresent()){
+            actuallyFollower.get().getFollowings().remove(actuallyFollowing.get());
+            actuallyFollowing.get().getFollowers().remove(actuallyFollower.get());
+            userRepository.save(actuallyFollower.get());
+            userRepository.save(actuallyFollowing.get());
+            return "Vous vous ête bien désabonné de "+actuallyFollowing.get().getLogin();
+        }
+        return "Erreur: Impossible de se désabonné car l'un des users est introuvable";
+    }
 }

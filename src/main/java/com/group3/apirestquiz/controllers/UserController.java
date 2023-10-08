@@ -77,10 +77,22 @@ public class UserController {
         return userService.followAnUser(followerId, userSecondId);
    }
 
-   @Operation(summary = "Recupérer la liste des followers d'un user")
+    @Operation(summary = "Ne plus suivre le compte d'un utilisateur")
+    @GetMapping("users/{followerId}/nofollow/{userSecondId}")
+    public String noFollowAnUser(@PathVariable Long followerId, @PathVariable Long userSecondId) {
+        return userService.noFollowAnUser(followerId, userSecondId);
+    }
+
+   @Operation(summary = "Récupérer la liste des followers d'un user")
    @GetMapping("users/{userId}/followers")
    public List<User> getFollowers(@PathVariable Long userId) {
         return userService.getFollowers(userId);
    }
+
+    @Operation(summary = "Récupérer la liste des users qu'un user follow")
+    @GetMapping("users/{userId}/followings")
+    public List<User> getFollowings(@PathVariable Long userId) {
+        return userService.getFollowings(userId);
+    }
 
 }

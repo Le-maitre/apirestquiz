@@ -34,7 +34,7 @@ public class QuizService {
     @Autowired
     private NotificationRepository notificationRepository;
 
-    // Definission des différent méthode pour le service quiz
+    // Definition des différente méthode pour le service quiz
     public List<Quiz> getQuizzes(){
         return quizRepository.findAll();
     }
@@ -156,5 +156,9 @@ public class QuizService {
         return quizList.stream()
                 .filter(quiz -> quiz.getDomain().equals(domain))
                 .collect(Collectors.toList());
+    }
+
+    public List<Quiz> getQuizzesByUserAndDomain(Long userId, String domain) {
+       return quizRepository.findAllByUserUserIdAndDomain(userId, domain);
     }
 }
