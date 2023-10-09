@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -71,14 +72,24 @@ public class User {
     @JsonIgnore
     private List<User> followings = new ArrayList<>();
 
-    @ManyToMany(
-            fetch = FetchType.LAZY
-            ,cascade = {CascadeType.PERSIST, CascadeType.MERGE} // La cascade s'applique uniquement à la création et à la modification
-    )
-    @JoinTable(
-            name = "user_notification",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "notification_id")
-    )
-    List<Notification> notifications = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<UserNotification> userNotifications = new ArrayList<>();
+
+    @JsonIgnore
+    public List<Notification> getAllNotificationsForUser() {
+        return userNotifications.stream().map(UserNotification::getNotification).collect(Collectors.toList());
+    }
+
+    @JsonIgnore
+    public List<Notification> getUnreadNotificationsForUser() {
+        return userNotifications.stream().filter(userNotification -> !userNotification.isRead())
+                .map(UserNotification::getNotification).collect(Collectors.toList());
+    }
+
+    @JsonIgnore
+    public List<Notification> getReadNotificationsForUser() {
+        return userNotifications.stream().filter(UserNotification::isRead)
+                .map(UserNotification::getNotification).collect(Collectors.toList());
+    }
 }

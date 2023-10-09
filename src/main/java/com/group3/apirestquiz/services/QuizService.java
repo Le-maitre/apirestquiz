@@ -1,13 +1,7 @@
 package com.group3.apirestquiz.services;
 
-import com.group3.apirestquiz.models.Notification;
-import com.group3.apirestquiz.models.Quiz;
-import com.group3.apirestquiz.models.Result;
-import com.group3.apirestquiz.models.User;
-import com.group3.apirestquiz.repositories.NotificationRepository;
-import com.group3.apirestquiz.repositories.QuizRepository;
-import com.group3.apirestquiz.repositories.ResultRepository;
-import com.group3.apirestquiz.repositories.UserRepository;
+import com.group3.apirestquiz.models.*;
+import com.group3.apirestquiz.repositories.*;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -33,6 +27,8 @@ public class QuizService {
     ResultRepository resultRepository;
     @Autowired
     private NotificationRepository notificationRepository;
+    @Autowired
+    private UserNotificationRepository userNotificationRepository;
 
     // Definition des différente méthode pour le service quiz
     public List<Quiz> getQuizzes(){
@@ -75,7 +71,7 @@ public class QuizService {
     public Quiz addQuiz(Quiz quiz){
         quiz.setNbQuestion(0);
         quizRepository.save(quiz);
-        // Ccréation de la notification
+        // Création de la notification
         String title = "QuizMaster";
         String body = quiz.getUser().getLogin()+" a crée un nouveau " +
                 "quiz nommée "+quiz.getTitle()+" dans la catégorie "+quiz.getDomain();
@@ -87,10 +83,14 @@ public class QuizService {
         // Récupérez la liste des followers de l'utilisateur et ajoutez la notification à chaque follower
         List<User> followers = userService.getFollowers(quiz.getUser().getUserId());
         for (User follower : followers) {
-            follower.getNotifications().add(notification);
+            UserNotification userNotification = new UserNotification();
+            userNotification.setUser(follower);
+            userNotification.setNotification(notification);
+            userNotification.setRead(false);
+
+            follower.getUserNotifications().add(userNotification);
             userRepository.save(follower);
         }
-
         return quiz;
     }
     public void deleteQuiz(Long userId, Long quizId) {
