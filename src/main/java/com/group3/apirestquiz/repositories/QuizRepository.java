@@ -11,6 +11,7 @@ import java.util.Optional;
 @Repository
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
     List<Quiz> findAllByDomain(String domain);
+    List<Quiz> findAllByUserUserIdAndDomain(Long userId, String domain);
     List<Quiz> findAllByTitle(String title);
     List<Quiz> findAllByTitleContaining(String keyword);
     List<Quiz> findAllByNbQuestion(int nbMaxQuestion);

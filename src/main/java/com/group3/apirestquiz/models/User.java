@@ -59,6 +59,19 @@ public class User {
     private List<User> followers = new ArrayList<>();
 
     @ManyToMany(
+            fetch = FetchType.LAZY // à la récupération des followers, les users ne sont pas récupérés. Mais lorsque je ferai appelle à la liste des followers de l'objet User spring exécutera une nouvelle requête pour récupérer les données. Cela permet d'avoir une performance optimale.
+            ,cascade = {CascadeType.PERSIST, CascadeType.MERGE} // La cascade s'applique uniquement à la création et à la modification
+    )
+    @JoinTable(
+            name = "following",
+            joinColumns = @JoinColumn(name = "user_id"), // Nom de la colonne pour l'utilisateur suivi
+            inverseJoinColumns = @JoinColumn(name = "following_id") // Nom de la colonne pour l'utilisateur qui suit
+    )
+
+    @JsonIgnore
+    private List<User> followings = new ArrayList<>();
+
+    @ManyToMany(
             fetch = FetchType.LAZY
             ,cascade = {CascadeType.PERSIST, CascadeType.MERGE} // La cascade s'applique uniquement à la création et à la modification
     )
