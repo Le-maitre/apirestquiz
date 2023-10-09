@@ -1,6 +1,5 @@
 package com.group3.apirestquiz.services;
 
-import com.group3.apirestquiz.models.Quiz;
 import com.group3.apirestquiz.models.Result;
 import com.group3.apirestquiz.models.User;
 import com.group3.apirestquiz.repositories.ResultRepository;
