@@ -6,6 +6,8 @@ import com.group3.apirestquiz.models.UserNotification;
 import com.group3.apirestquiz.repositories.UserNotificationRepository;
 import com.group3.apirestquiz.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -71,5 +73,14 @@ public class NotificationService {
             return userOptional.get().getUserNotifications();
         }
         return new ArrayList<>();
+    }
+
+    public ResponseEntity<UserNotification> deleteNotificationForUser(Long userId, Long notificationId) {
+        Optional<UserNotification> userNotificationOptional = userNotificationRepository.findByUserUserIdAndNotificationNotificationId(userId, notificationId);
+        if(userNotificationOptional.isPresent()){
+            userNotificationRepository.delete(userNotificationOptional.get());
+            return new ResponseEntity<>(userNotificationOptional.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
