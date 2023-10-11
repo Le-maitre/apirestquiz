@@ -77,7 +77,7 @@ public class UserController {
    }
 
     @Operation(summary = "Ne plus suivre le compte d'un utilisateur")
-    @GetMapping("users/{followerId}/nofollow/{userSecondId}")
+    @GetMapping("users/{followerId}/unfollow/{userSecondId}")
     public String noFollowAnUser(@PathVariable Long followerId, @PathVariable Long userSecondId) {
         return userService.noFollowAnUser(followerId, userSecondId);
     }
