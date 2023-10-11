@@ -104,9 +104,13 @@ public class UserService {
         Optional<User> follower = userRepository.findById(followerId);
         Optional<User> userSecond = userRepository.findById(userSecondId);
         if(follower.isPresent() && userSecond.isPresent()){
-            userSecond.get().getFollowers().add(follower.get());
-            userRepository.save(userSecond.get());
-            return "Abonnement reussi";
+            if(!userSecond.get().getFollowers().contains(follower.get())){
+                userSecond.get().getFollowers().add(follower.get());
+                follower.get().getFollowings().add(userSecond.get());
+                userRepository.save(userSecond.get());
+                userRepository.save(follower.get());
+                return "Abonnement reussi";
+            }
         }
         return "Erreur: Vous ne pouvez pas vous abonnées";
     }
@@ -124,11 +128,13 @@ public class UserService {
         Optional<User> actuallyFollower = userRepository.findById(followerId);
         Optional<User> actuallyFollowing = userRepository.findById(userSecondId);
         if(actuallyFollower.isPresent() && actuallyFollowing.isPresent()){
-            actuallyFollower.get().getFollowings().remove(actuallyFollowing.get());
-            actuallyFollowing.get().getFollowers().remove(actuallyFollower.get());
-            userRepository.save(actuallyFollower.get());
-            userRepository.save(actuallyFollowing.get());
-            return "Vous vous ête bien désabonné de "+actuallyFollowing.get().getLogin();
+            if(actuallyFollower.get().getFollowings().contains(actuallyFollowing.get())){
+                actuallyFollower.get().getFollowings().remove(actuallyFollowing.get());
+                actuallyFollowing.get().getFollowers().remove(actuallyFollower.get());
+                userRepository.save(actuallyFollower.get());
+                userRepository.save(actuallyFollowing.get());
+                return "Vous vous ête bien désabonné de "+actuallyFollowing.get().getLogin();
+            }
         }
         return "Erreur: Impossible de se désabonné car l'un des users est introuvable";
     }
