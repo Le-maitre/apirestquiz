@@ -94,7 +94,7 @@ public class ResultService {
 
 
 
-    public Map<Integer, Map<String, Object>> getMaxScoreResultsByUserAndQuiz(Long quizId) {
+    /*public Map<Integer, Map<String, Object>> getMaxScoreResultsByUserAndQuiz(Long quizId) {
         List<Result> maxScoreResults = resultRepository.findMaxScoreResultsByUserAndQuiz(quizId);
 
         // Traiter les résultats pour les formater sous forme de JSON
@@ -108,9 +108,49 @@ public class ResultService {
             formattedResults.put(rank, userData);
             rank++;
         }
+        return formattedResults;
+    }*/
+
+
+    public Map<Integer, Map<String, Object>> getMaxScoreResultsByUserAndQuiz(Long quizId) {
+        List<Result> maxScoreResults = resultRepository.findMaxScoreResultsByUserAndQuiz(quizId);
+
+        // Structure de données pour stocker le meilleur score de chaque utilisateur
+        Map<Long, Result> bestScores = new HashMap<>();
+
+        int rank = 1;
+
+        for (Result result : maxScoreResults) {
+            Long userId = result.getUser().getUserId();
+
+            // Vérifie si l'utilisateur a déjà un meilleur score
+            if (!bestScores.containsKey(userId)) {
+                bestScores.put(userId, result);
+            } else {
+                Result existingResult = bestScores.get(userId);
+
+                // Compare le score actuel avec le score stocké
+                if (result.getScore() > existingResult.getScore()) {
+                    bestScores.put(userId, result); // Remplace le score stocké
+                }
+            }
+        }
+
+        // Formatter les résultats finaux sous forme de JSON
+        Map<Integer, Map<String, Object>> formattedResults = new HashMap<>();
+
+        for (Result bestResult : bestScores.values()) {
+            Map<String, Object> userData = new HashMap<>();
+            userData.put("rank", rank);
+            userData.put("score", String.valueOf(bestResult.getScore()));
+            userData.put("user", bestResult.getUser());
+            formattedResults.put(rank, userData);
+            rank++;
+        }
 
         return formattedResults;
     }
+
 
     public List<Result> getResultsByUserId(Long userId) {
         return resultRepository.findAllByUserUserId(userId);

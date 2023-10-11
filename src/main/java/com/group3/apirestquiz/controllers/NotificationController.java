@@ -5,10 +5,8 @@ import com.group3.apirestquiz.models.UserNotification;
 import com.group3.apirestquiz.services.NotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -54,5 +52,11 @@ public class NotificationController {
     @GetMapping("users/{userId}/usernotifications")
     public List<UserNotification> getUserNotifications(@PathVariable Long userId) {
         return notificationService.getUserNotifications(userId);
+    }
+
+    @Operation(summary = "Supprimer une notification pour un user")
+    @DeleteMapping("users/{userId}/notifications/{notificationId}")
+    public ResponseEntity<UserNotification> deleteNotificationForUser(@PathVariable Long userId, @PathVariable Long notificationId) {
+        return notificationService.deleteNotificationForUser(userId, notificationId);
     }
 }
