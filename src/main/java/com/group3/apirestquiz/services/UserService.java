@@ -104,12 +104,15 @@ public class UserService {
         Optional<User> follower = userRepository.findById(followerId);
         Optional<User> userSecond = userRepository.findById(userSecondId);
         if(follower.isPresent() && userSecond.isPresent()){
-            if(!userSecond.get().getFollowers().contains(follower.get())){
+            if(!userSecond.get().getFollowers().contains(follower.get()) && !followerId.equals(userSecondId)){
                 userSecond.get().getFollowers().add(follower.get());
                 follower.get().getFollowings().add(userSecond.get());
                 userRepository.save(userSecond.get());
                 userRepository.save(follower.get());
                 return "Abonnement reussi";
+            }
+            else{
+                return "Vous être déjà abonné ou vous ne pouvez pas vous abonné à votre propre compte";
             }
         }
         return "Erreur: Vous ne pouvez pas vous abonnées";
@@ -128,12 +131,15 @@ public class UserService {
         Optional<User> actuallyFollower = userRepository.findById(followerId);
         Optional<User> actuallyFollowing = userRepository.findById(userSecondId);
         if(actuallyFollower.isPresent() && actuallyFollowing.isPresent()){
-            if(actuallyFollower.get().getFollowings().contains(actuallyFollowing.get())){
+            if(actuallyFollower.get().getFollowings().contains(actuallyFollowing.get()) && !followerId.equals(userSecondId)){
                 actuallyFollower.get().getFollowings().remove(actuallyFollowing.get());
                 actuallyFollowing.get().getFollowers().remove(actuallyFollower.get());
                 userRepository.save(actuallyFollower.get());
                 userRepository.save(actuallyFollowing.get());
                 return "Vous vous ête bien désabonné de "+actuallyFollowing.get().getLogin();
+            }
+            else{
+                return "Impossible de se désabonné car l'utilisateur s'exite pas";
             }
         }
         return "Erreur: Impossible de se désabonné car l'un des users est introuvable";
