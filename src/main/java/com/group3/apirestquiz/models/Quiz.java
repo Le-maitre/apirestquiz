@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @DynamicUpdate // permet de mettre à jour uniquement la partie modifier
@@ -59,4 +61,12 @@ public class Quiz {
     )
     @JoinColumn(name = "utilisateur_id")
     private User user;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
+    )
+    @JoinColumn(name = "quiz_id")
+    private List<Question> questions = new ArrayList<>();
 }

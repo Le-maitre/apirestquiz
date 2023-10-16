@@ -59,7 +59,7 @@ public class ResultService {
             result.get().setState(true);
         }
         else {
-            return null;
+            return Optional.empty();
         }
         resultRepository.save(result.get());
         return result;
@@ -91,6 +91,35 @@ public class ResultService {
         }
         return null;
     }
+
+    /*public Result respondQuestion(Long userId, Long quizId, int answer, Question question) {
+        //Optional<Question> question = questionService.getNextQuestion(userId, quizId);
+        Result existeResult = new Result();
+        Optional<Result> result = getResultByUserIdAndQuizIdAndStateFalse(userId, quizId);
+        if (result.isPresent()){
+            // Vérification si la réponse est correcte
+            if (question.getRankResponse() == answer){
+                result.get().setScore(result.get().getScore()+question.getPoint());
+                result.get().setNbCorrectQuestion(result.get().getNbCorrectQuestion()+1);
+            }
+            // Si la réponse est incorrecte
+            else {
+                result.get().setNbIncorrectQuestion(result.get().getNbIncorrectQuestion()+1);
+            }
+            result.get().getQuestions().add(question);
+
+            int questionAnsweredSize = result.get().getQuestions().size(); // On recupère le nombre de question repondue
+            int nbQuestion = result.get().getQuiz().getNbQuestion();
+
+            if(questionAnsweredSize == nbQuestion){
+                result.get().setState(true);
+            }
+
+            resultRepository.save(result.get());
+            existeResult = result.get();
+        }
+        return existeResult;
+    }*/
 
 
 

@@ -5,6 +5,7 @@ import com.group3.apirestquiz.models.Result;
 import com.group3.apirestquiz.services.QuestionService;
 import com.group3.apirestquiz.services.ResultService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,5 @@ public class PlayQuizController {
     public Result respondQuestion(@PathVariable Long userId, @PathVariable Long quizId, @RequestParam("answer") int answer) {
         return resultService.respondQuestion(userId, quizId, answer);
     }
-
 
 }

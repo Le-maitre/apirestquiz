@@ -24,7 +24,7 @@ public class Result {
     @Column(name = "etat")
     private boolean state=false; // Pour savoir si la partie est fini ou non
 
-    private LocalDate date=LocalDate.now();
+    private LocalDate creationDate =LocalDate.now();
 
     private int nbCorrectQuestion=0; // le nombre de question correcte
     private int nbIncorrectQuestion=0; // le nombre de question incorrecte
