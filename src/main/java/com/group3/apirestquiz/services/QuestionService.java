@@ -61,8 +61,7 @@ public class QuestionService {
         return questionRepository.findAllByQuizQuizIdAndQuizUserUserId(quizId, userId);
     }
     public Optional<Question> getQuestionByQuizIdAndUserId(Long quizId, Long userId, Long questionId){
-        Optional<Question> question = getQuestionsByQuizIdAndUserId(quizId, userId).stream().filter(q-> q.getQuestionId().equals(questionId)).findFirst();
-        return question;
+        return getQuestionsByQuizIdAndUserId(quizId, userId).stream().filter(q-> q.getQuestionId().equals(questionId)).findFirst();
     }
     public void deleteQuestion(Long userId, Long quizId, Long questionId) {
         Optional<Question> question = getQuestionByQuizIdAndUserId(quizId, userId, questionId);
@@ -96,7 +95,6 @@ public class QuestionService {
 
     public Optional<Question> getNextQuestion(Long userId, Long quizId) {
         Optional<Result> result = resultService.getResultByUserIdAndQuizIdAndStateFalse(userId, quizId);
-        System.out.println(quizId);
         if (result.isEmpty()){
             Optional<User> user = userService.getUserById(userId);
             Optional<Quiz> quiz = quizService.getQuizById(quizId);
@@ -105,6 +103,7 @@ public class QuestionService {
                 newResult.setUser(user.get());
                 newResult.setQuiz(quiz.get());;
                 result = Optional.of(resultRepository.save(newResult));
+                System.out.println("result.state: "+result.get().isState());
             }
             else{
                 return Optional.empty();
@@ -119,7 +118,7 @@ public class QuestionService {
         }
         else {
             result.get().setState(true);
-            resultRepository.save(result.get());
+            //resultRepository.save(result.get());
         }
         return getQuestionByRank(rank, quizId);
     }
